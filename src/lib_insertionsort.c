@@ -32,5 +32,6 @@ JNIEXPORT jint JNICALL Java_lib_NativeInsertionSort_sort
 			mem += 10;
 		}
 	}
+  (*env)->ReleaseIntArrayElements(env, buf, arry, 0);
 	return mem;
 }
