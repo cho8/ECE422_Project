@@ -1,6 +1,5 @@
 package lib;
 import java.io.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -8,6 +7,7 @@ import java.util.Random;
 public class DataGenerator {
 	private static Random rand = new Random();
 	private static int MAX = 100;
+	private static String USAGE = "java DataGenerator <output file> <number if integers>";
 	
 	public static int[] generateInts(int num) {
 		int[] arry = new int[num];
@@ -18,10 +18,19 @@ public class DataGenerator {
 		return arry;
 	}
 	
+	private static void closeSilently(Closeable c) {
+		try {
+			c.close();
+		} catch (IOException e) {
+			System.err.println("Something went wrong with closing "+ c);
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
 		if (args.length != 2) {
 			System.out.println("Invalid number of arguments.");
-			System.exit(1);
+			System.out.println(USAGE);
+			return;
 		}
 		
 		// Get file
@@ -33,7 +42,7 @@ public class DataGenerator {
 			
 		} catch(IOException e) {
 			System.err.println(args[0] +" is not a valid file.");
-			System.exit(1);
+			return;
 		}
 		System.out.println("Opening file");
 		
@@ -44,7 +53,7 @@ public class DataGenerator {
 			
 		} catch (NumberFormatException e) {
 			System.err.println(args[1] + " Not an integer.");
-			System.exit(1);
+			return;
 		}
 		System.out.println("numints " + numInts);
 		
@@ -56,10 +65,11 @@ public class DataGenerator {
 			for (int i=0; i<numInts;i++) {
 				fw.write(arry[i]+" ");
 			}
+			fw.write("\n");
 		} catch (IOException e) {
 			System.err.println("Error writing to file: " +e);
 		} finally {
-			fw.close();
+			closeSilently(fw);
 		}
 	}
 	
