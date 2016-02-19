@@ -2,8 +2,8 @@
 **.so
 **.class
 **.txt
-/test
+
 /bin
-.project
-.classpath
-/.settings
+.project.*
+.classpath.*
+.settings
