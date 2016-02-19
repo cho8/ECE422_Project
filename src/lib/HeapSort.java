@@ -63,12 +63,4 @@ public class HeapSort {
 		return mem;
 	}
 
-//	public static void main(String[] args) {
-//		int[] test_arry = {1,5,2,6,3,7};
-//		int mem = sort(test_arry);
-//		for (int i=0; i<test_arry.length; i++){
-//			System.out.print(test_arry[i] + " ");
-//		}
-//		System.out.println("\n" + mem);
-//	}
 }

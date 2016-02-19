@@ -17,8 +17,7 @@ public class DataSorter {
 	static double insertErrProb;
 	static int timelimit;
 
-	private static Random rand;
-	private static Timer TIMER = new Timer();
+	private static Random rand = new Random();
 	private static String USAGE = "java DataSorter <input file> <output file> <heapsort error probability> <insertionsort error probability> <time limit>";
 
 	public DataSorter(double heapErr, double insErr, int time) {
@@ -41,40 +40,80 @@ public class DataSorter {
 	}
 
 	private static class SortThread extends Thread {
-		int mem;
+		int mem = 0;
 		public void run(){
-			System.out.println("Generic sort thread.");
+			try{
+				for (;;);
+			} catch (ThreadDeath td){
+				System.out.println("I'm dead!!!");
+				throw new ThreadDeath();
+			}
 		}
 		public int getMem() {
 			return mem;
-		}
+		}		
 	}
 
 	private static boolean executeHeapSort(int[] arry) {
 		SortThread heapThread = new SortThread(){
 			public void run(){
-				HeapSort.sort(arry);
+				mem = HeapSort.sort(arry);
 			}    
 		};
+		Timer t = new Timer();
+		WatchDog w = new WatchDog(heapThread);
+		t.schedule(w, timelimit);
 		heapThread.start();
-		TIMER.schedule(new WatchDog(heapThread), timelimit);
 		try {
+			heapThread.join();
+			t.cancel();
 			int mem = heapThread.getMem();
-			//			int mem = HeapSort.sort(arry);
+
 			double HAZARD = heapErrProb * mem;
 			double rn = rand.nextDouble();
-			if ( 0.5 <= rn && rn >= (0.5+HAZARD)) {
+			if (true) {
+//			if ( 0.5 <= rn && rn >= (0.5+HAZARD)) {
 				System.err.println("Heap sort failed due to memory operation failure.");
 				return false;
 			}
+
 			return adjudicateSort(arry);
+		} catch (InterruptedException e){
+			System.err.println("Interrupted heapsort: "+ e);
 		} catch (RuntimeException e)  {
 			System.err.println("Something weird in executeHeapSort: "+ e);
-			return false;
 		}
+		return false;
 	}
 
 	private static boolean executeInsertionSort(int[] arry) {
+		SortThread insertionThread = new SortThread(){
+			public void run(){
+				mem = HeapSort.sort(arry);
+			}    
+		};
+		Timer t = new Timer();
+		WatchDog w = new WatchDog(insertionThread);
+		t.schedule(w, timelimit);
+		insertionThread.start();
+		try {
+			insertionThread.join();
+			t.cancel();
+			int mem = insertionThread.getMem();
+
+			double HAZARD = heapErrProb * mem;
+			double rn = rand.nextDouble();
+			if ( 0.5 <= rn && rn >= (0.5+HAZARD)) {
+				System.err.println("Insertion sort failed due to memory operation failure.");
+				return false;
+			}
+
+			return adjudicateSort(arry);
+		} catch (InterruptedException e){
+			System.err.println("Interrupted insertionsort: "+ e);
+		} catch (RuntimeException e)  {
+			System.err.println("Something weird in executeInsertionSort: "+ e);
+		}
 		return false;
 	}
 
@@ -85,13 +124,14 @@ public class DataSorter {
 		System.arraycopy(arry, 0, inscpy, 0, arry.length);
 		if(executeHeapSort(hpcpy)) {
 			return hpcpy;
-
-		} else if (executeInsertionSort(inscpy)){
+		}
+		System.err.println("Primary variant failed. Trying backup variant.");
+		if (executeInsertionSort(inscpy)){
 			return inscpy;
 		} 
-		throw new SortFailureException("Everything has exploded and nothing works.");
+		throw new SortFailureException("All variants failed.");
 	}
-	
+
 	private static void closeSilently(Closeable c) {
 		try {
 			c.close();
@@ -104,7 +144,7 @@ public class DataSorter {
 		if (args.length != 5) {
 			System.out.println("Wrong number of args.");
 			System.out.println(USAGE);
-			return;
+			System.exit(0);
 		}
 
 		// input file
@@ -112,7 +152,8 @@ public class DataSorter {
 			File inf = new File(args[0]);
 			inf.getCanonicalPath();
 		} catch (IOException e) {
-			System.err.println("Invalid filename " + args[0]);
+			System.err.println("Invalid filename " + args[0] + " :" + e);
+			System.exit(0);
 		}
 
 		// read input
@@ -126,7 +167,8 @@ public class DataSorter {
 				arry[i] = Integer.parseInt(s[i]);
 			}
 		} catch (IOException e) {
-			System.err.println("Error writing to file: " +e);
+			System.err.println("Error in input file: " + e);
+			System.exit(0);
 		} finally {
 			closeSilently(fr);
 		}
@@ -137,12 +179,13 @@ public class DataSorter {
 			heapErrProb = Double.parseDouble(args[2]);
 		} catch (NumberFormatException e) {
 			System.err.println(args[2] +" is an invalid double.");
+			System.exit(0);
 		}
 		try {
 			insertErrProb = Double.parseDouble(args[3]);
 		} catch (NumberFormatException e) {
 			System.err.println(args[3] +" is an invalid double.");
-			return;
+			System.exit(0);
 		}
 
 		// parse timelimit
@@ -151,7 +194,7 @@ public class DataSorter {
 			timelimit = Integer.parseInt(args[4]);
 		} catch (NumberFormatException e) {
 			System.err.println(args[4] +" is an invalid integer.");
-			return;
+			System.exit(0);
 		}
 		// output file
 		try {
@@ -160,7 +203,7 @@ public class DataSorter {
 			f.delete();
 		} catch (IOException e) {
 			System.err.println(args[1] +" is an invalid file.");
-			return;
+			System.exit(0);
 		}
 		// sorting
 		BufferedWriter fw = null;
@@ -175,7 +218,7 @@ public class DataSorter {
 		} catch (IOException e) {
 			System.err.println("Error writing to file: " +e);
 		} catch (SortFailureException e) {
-			System.err.println("Sorting failed!"+  e);
+			System.err.println("Everything exploded: " +e);
 		} finally {
 			closeSilently(fw);
 		}

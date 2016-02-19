@@ -7,13 +7,12 @@ import java.util.Random;
 public class DataGenerator {
 	private static Random rand = new Random();
 	private static int MAX = 100;
-	private static String USAGE = "java DataGenerator <output file> <number if integers>";
+	private static String USAGE = "java DataGenerator <output file> <number of integers>";
 	
 	public static int[] generateInts(int num) {
 		int[] arry = new int[num];
 		for (int i =0; i< num; i++) {
 			arry[i] = rand.nextInt(MAX);
-			System.out.println(arry[i]);
 		}
 		return arry;
 	}
@@ -55,7 +54,6 @@ public class DataGenerator {
 			System.err.println(args[1] + " Not an integer.");
 			return;
 		}
-		System.out.println("numints " + numInts);
 		
 		// Write file with array of ints
 		BufferedWriter fw = null;
@@ -66,6 +64,7 @@ public class DataGenerator {
 				fw.write(arry[i]+" ");
 			}
 			fw.write("\n");
+			System.out.println("Integers generated to " + args[0]);
 		} catch (IOException e) {
 			System.err.println("Error writing to file: " +e);
 		} finally {
