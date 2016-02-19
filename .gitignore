@@ -4,3 +4,6 @@
 **.txt
 /test
 /bin
+.project
+.classpath
+/.settings
