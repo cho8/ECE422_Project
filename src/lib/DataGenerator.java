@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class DataGenerator {
 	private static Random rand = new Random();
-	private static int MAX = 100;
+	private static int MAX = 500;
 	private static String USAGE = "java DataGenerator <output file> <number of integers>";
 	
 	public static int[] generateInts(int num) {
@@ -43,7 +43,6 @@ public class DataGenerator {
 			System.err.println(args[0] +" is not a valid file.");
 			return;
 		}
-		System.out.println("Opening file");
 		
 		// Get number if ints
 		int numInts = 0;

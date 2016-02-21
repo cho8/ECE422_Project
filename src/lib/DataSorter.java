@@ -66,14 +66,14 @@ public class DataSorter {
 		heapThread.start();
 		try {
 			heapThread.join();
-			t.cancel();
 			int mem = heapThread.getMem();
 
 			double HAZARD = heapErrProb * mem;
 			double rn = rand.nextDouble();
-			if (true) {
-//			if ( 0.5 <= rn && rn >= (0.5+HAZARD)) {
+			
+			if ( 0.5 <= rn && rn <= (0.5+HAZARD)) {
 				System.err.println("Heap sort failed due to memory operation failure.");
+				t.cancel();
 				return false;
 			}
 
@@ -89,7 +89,7 @@ public class DataSorter {
 	private static boolean executeInsertionSort(int[] arry) {
 		SortThread insertionThread = new SortThread(){
 			public void run(){
-				mem = HeapSort.sort(arry);
+				mem = NativeInsertionSort.sort(arry);
 			}    
 		};
 		Timer t = new Timer();
@@ -98,13 +98,14 @@ public class DataSorter {
 		insertionThread.start();
 		try {
 			insertionThread.join();
-			t.cancel();
+			
 			int mem = insertionThread.getMem();
 
 			double HAZARD = heapErrProb * mem;
 			double rn = rand.nextDouble();
-			if ( 0.5 <= rn && rn >= (0.5+HAZARD)) {
+			if ( 0.5 <= rn && rn <= (0.5+HAZARD)) {
 				System.err.println("Insertion sort failed due to memory operation failure.");
+				t.cancel();
 				return false;
 			}
 
