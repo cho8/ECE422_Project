@@ -54,7 +54,8 @@ public class DataSorter {
 		}		
 	}
 
-	private static boolean executeHeapSort(int[] arry) {
+	private static boolean executeHeapSort(int[] arr) {
+    final int[] arry = arr;
 		SortThread heapThread = new SortThread(){
 			public void run(){
 				mem = HeapSort.sort(arry);
@@ -86,7 +87,8 @@ public class DataSorter {
 		return false;
 	}
 
-	private static boolean executeInsertionSort(int[] arry) {
+	private static boolean executeInsertionSort(int[] arr) {
+    final int[] arry = arr;
 		SortThread insertionThread = new SortThread(){
 			public void run(){
 				mem = NativeInsertionSort.sort(arry);
