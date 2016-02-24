@@ -120,7 +120,7 @@ public class DataSorter {
 		return false;
 	}
 
-	public int[] executeSort(int[] arry)  {
+	private int[] executeSort(int[] arry)  {
 		int[] hpcpy = new int[arry.length];
 		System.arraycopy(arry, 0, hpcpy, 0, arry.length);
 		int[] inscpy = new int[arry.length];
