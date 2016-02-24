@@ -18,7 +18,7 @@ public class DataSorter {
 	static int timelimit;
 
 	private static Random rand = new Random();
-	private static String USAGE = "java DataSorter <input file> <output file> <heapsort error probability> <insertionsort error probability> <time limit>";
+	private static String USAGE = "java DataSorter <input file> <output file> <heapsort error probability> <insertionsort error probability> <time limit in ms>";
 
 	public DataSorter(double heapErr, double insErr, int time) {
 		timelimit = time;
