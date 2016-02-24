@@ -9,7 +9,7 @@ public class HeapSort {
 	private static int len;
 	private static int largest;
 
-	public static int buildHeap(int[] arry){
+	private static int buildHeap(int[] arry){
 		len = arry.length-1;
 		int mem=1;
 		for (int i =len/2; i>= 0; i--){
@@ -19,7 +19,7 @@ public class HeapSort {
 		return mem;
 	}
 
-	public static int maxHeap(int[] arry, int parent){
+	private static int maxHeap(int[] arry, int parent){
 		int l_child = 2*parent;
 		int r_child = 2*parent+1;
 		int mem = 4;
@@ -41,7 +41,7 @@ public class HeapSort {
 		return mem;
 	}
 
-	public static int swap(int a, int b){
+	private static int swap(int a, int b){
 		int t = arry[a];
 		arry[a] = arry[b];
 		arry[b] = t;
