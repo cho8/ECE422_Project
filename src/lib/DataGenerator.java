@@ -9,7 +9,7 @@ public class DataGenerator {
 	private static int MAX = 500;
 	private static String USAGE = "java DataGenerator <output file> <number of integers>";
 	
-	public static int[] generateInts(int num) {
+	private static int[] generateInts(int num) {
 		int[] arry = new int[num];
 		for (int i =0; i< num; i++) {
 			arry[i] = rand.nextInt(MAX);
