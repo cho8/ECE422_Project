@@ -1,6 +1,8 @@
 To get setup:
 - in the 'src' directory
-    make
+
+> 'make'
+
 - set LD_LIBRARY_PATH to the current directory
 
 > `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.`
