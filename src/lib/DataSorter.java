@@ -13,9 +13,9 @@ import java.util.Timer;
 
 public class DataSorter {
 
-	static double heapErrProb;
-	static double insertErrProb;
-	static int timelimit;
+	private static double heapErrProb;
+	private static double insertErrProb;
+	private static int timelimit;
 
 	private static Random rand = new Random();
 	private static String USAGE = "java DataSorter <input file> <output file> <heapsort error probability> <insertionsort error probability> <time limit in ms>";
@@ -55,7 +55,7 @@ public class DataSorter {
 	}
 
 	private static boolean executeHeapSort(int[] arr) {
-    final int[] arry = arr;
+    		final int[] arry = arr;
 		SortThread heapThread = new SortThread(){
 			public void run(){
 				mem = HeapSort.sort(arry);
@@ -88,7 +88,7 @@ public class DataSorter {
 	}
 
 	private static boolean executeInsertionSort(int[] arr) {
-    final int[] arry = arr;
+    		final int[] arry = arr;
 		SortThread insertionThread = new SortThread(){
 			public void run(){
 				mem = NativeInsertionSort.sort(arry);
