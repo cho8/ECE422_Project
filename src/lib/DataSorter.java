@@ -67,6 +67,7 @@ public class DataSorter {
 		heapThread.start();
 		try {
 			heapThread.join();
+      t.cancel();
 			int mem = heapThread.getMem();
 
 			double HAZARD = heapErrProb * mem;
@@ -82,9 +83,11 @@ public class DataSorter {
 		} catch (InterruptedException e){
 			System.err.println("Interrupted heapsort: "+ e);
 		} catch (RuntimeException e)  {
-			System.err.println("Something weird in executeHeapSort: "+ e);
-		}
-		return false;
+			System.err.println("Something weird in executeHeapSort: "+ e)
+    } catch (ThreadDeath e) {
+      System.err.println("DeadThread");
+    }
+    return false;
 	}
 
 	private static boolean executeInsertionSort(int[] arr) {
@@ -100,7 +103,7 @@ public class DataSorter {
 		insertionThread.start();
 		try {
 			insertionThread.join();
-			
+			t.cancel();
 			int mem = insertionThread.getMem();
 
 			double HAZARD = heapErrProb * mem;
@@ -116,8 +119,9 @@ public class DataSorter {
 			System.err.println("Interrupted insertionsort: "+ e);
 		} catch (RuntimeException e)  {
 			System.err.println("Something weird in executeInsertionSort: "+ e);
-		}
-		return false;
+    } catch (ThreadDeath e) {
+      System.err.println("DeadThread");
+      return false;
 	}
 
 	private int[] executeSort(int[] arry)  {
