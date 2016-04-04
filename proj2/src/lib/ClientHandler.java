@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 public class ClientHandler {
 
 	public static void main(String[] args) {
-		String user = 'user1';
-		long[] key = 12312312;
-		Client client = new Client()
+		String user = "user1";
+//		long[] key = 12312312;
+//		Client client = new Client()
 	}
 }
