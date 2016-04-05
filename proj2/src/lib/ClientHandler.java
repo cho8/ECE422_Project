@@ -45,7 +45,7 @@ public class ClientHandler {
 			} catch (Exception e) {
 				System.err.println("Client: Error--"+e);
 			} finally {
-				System.out.println("Closing client connection.");
+				
 				try { client.closeSocket(); } catch (IOException e) {
 					System.out.println("Error in closing client connection");
 				}
