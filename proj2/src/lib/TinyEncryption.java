@@ -7,29 +7,23 @@ public class TinyEncryption {
 	public native static void decrypt(byte[] v, long[] k);
 	
 	static {
-		System.loadLibrary("tinyencrypt");
+		System.loadLibrary("tinyencryption");
 	}
 	
-	private long[] key;
 	
-	public TinyEncryption(long[] key) {
-		assert key.length == 4;
-		this.key = key;
-	}
-	
-	public byte[] encrypt(byte[] data) {
+	public static byte[] encryptData(byte[] data, long[] key) {
 		byte[] padded = padData(data);
 		encrypt(padded, key);
 		return padded;
 	}
 	
-	public byte[] decrypt(byte[] data) {
+	public static byte[] decryptData(byte[] data, long[] key) {
 		byte[] copy = Arrays.copyOf(data,  data.length);
 		decrypt(copy, key);
 		return copy;
 	}
 	
-	private byte[] padData(byte[] data) {
+	private static byte[] padData(byte[] data) {
 		return Arrays.copyOf(data,  (int) Math.ceil((double) data.length / (Long.BYTES * 2)) * (Long.BYTES * 2));
 	}
 

@@ -16,9 +16,9 @@ endif
 
 all: native 
 	@echo OS detected: ${UNAME}
-	@echo Make sure to set LD_LIBRARY_PATH
+	@echo Make sure to ‘export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. ‘
 native: classes
-	javah lib.NativeInsertionSort; 
+	javah lib.TinyEncryption; 
 	gcc -std=c99 -I$$JAVA_HOME/include -I$$JAVA_HOME/include/$(subdir) -shared -fpic -o $(library) lib_tinyencryption.c;
 	
 classes :

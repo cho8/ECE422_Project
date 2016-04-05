@@ -2,25 +2,42 @@ package lib;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 import java.lang.StringBuffer;
 
 
 public class Client {
-	private long[] key;
 	private String user;
 	private String host = "localhost";
-	public static int port = 16000;
+	public static int port = 16000; //hardcoded 16000
+	
+	public static String FILE_NOT_FOUND = "file_not_found";
+	public static String FILE_ACK = "file_ACK";
+	public static String ACCESS_DENIED = "access denied";
+	public static String ACCESS_GRANTED = "access granted";
+	public static String FINISHED = "finished";
 
 	Socket connection;
 	StringBuffer instr = new StringBuffer();
+	ReadWriteHandler rw;
 
 	public Client(String user, long[] key) {
 		this.user = user;
-		this.key = key;
+		try {
+			connectSocket();
+			rw = new ReadWriteHandler(connection);
+			rw.setKey(key);
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+		System.out.println("Client initialized");
 	}
 
 	public void connectSocket() throws IOException {
-		System.out.println("Client initialized");
+		
 		// Address object of server
 		InetAddress address = InetAddress.getByName(host);
 		connection = new Socket(address, port);
@@ -29,28 +46,64 @@ public class Client {
 	public void closeSocket() throws IOException {
 		connection.close();		
 	}
-
-	public void writeToSocket(String instr) throws IOException {
-		BufferedOutputStream bos = new BufferedOutputStream(connection.getOutputStream());
-		OutputStreamWriter osw = new OutputStreamWriter(bos, "US-ASCII");
-		//TODO: Is it efficient to initialize these every time we want to write something?
-		osw.write(instr);
-		osw.flush();
+	
+	public void testConnection() throws UnsupportedEncodingException, IOException {
+		System.out.println("Hello!");
+		byte[] message = "Hello!".getBytes();
+		long[] key = new long[] {1827361872L,194291L, 91487L, 1784619L};
+		rw.setKey(key);
+		byte[] encr = rw.encrypt(message);
+		rw.write(encr);
 	}
 	
-	public void readFromSocket() throws IOException {
-		BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
-		InputStreamReader isr = new InputStreamReader(bis, "US-ASCII");
-		//TODO: Is it efficient to initialize these every time we read?
-		// Read socket's inputstream and append to stringbuff
-		int c;
-		//TODO: What is 13?
-		while ( (c=isr.read()) != 13) {
-			instr.append((char)c);
-		}
-		System.out.println(instr);
+	public boolean login() throws IOException {
 		
+		rw.write(user.getBytes());
+		
+		byte[] receivedBytes = rw.read();
+		String receivedMessage = new String(rw.decrypt(receivedBytes)).trim();
+
+		if (receivedMessage.equals(ACCESS_DENIED)) {
+			System.out.println("Login denied.");
+			rw.write(FINISHED.getBytes());
+		} else if (receivedMessage.equals(ACCESS_GRANTED)) {
+			System.out.println("Login successful.");
+			return true;
+		}
+		System.out.println("No access message received from server.");
+		return false;
 	}
+	
+	public void requestFileNames() throws IOException {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Request a filename. ('finished' to exit)");
+		String filename = "";
+		// loop for multiple filenames
+		while (true) {
+			filename = scanner.next();
+			if (filename.equals(FINISHED)) {
+				rw.write(FINISHED.getBytes());
+				return;
+			}
+			rw.write(filename.getBytes());
+			byte[] received = rw.decrypt(rw.read());
+			String receivedStr = new String(received).trim();
+			
+			if (receivedStr.equals(FILE_ACK)) {
+				System.out.println("File found on server. Transfering...");
+				byte[] receivedFile= rw.read();
+				Path path = Paths.get(filename);
+				Files.write(path, receivedFile);
+				System.out.println("Done. Next?");
+			} else if (receivedStr.equals(FILE_NOT_FOUND)) {
+				System.err.println("Invalid filename, try again...");
+			} else {
+				throw new IOException ("Unexpected response to filename");
+			}
+		}
+	}
+
+
 
 
 

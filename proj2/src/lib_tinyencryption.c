@@ -39,26 +39,32 @@ unsigned long delta=0x9e3779b9l;
 
 JNIEXPORT void JNICALL Java_lib_TinyEncryption_encrypt
   (JNIEnv* env, jclass jclss, jbyteArray jmessage, jlongArray jkey) {
+  jboolean is_copy_value;
+  jboolean is_copy_key;
   jsize len = (*env)->GetArrayLength(env, jmessage);
-  jbyte* message = (*env)->GetByteArrayElements(env,jmessage, NULL);
-  jlong* key = (*env)->GetLongArrayElements(env, jkey, NULL);
+  jbyte* message = (*env)->GetByteArrayElements(env,jmessage, &is_copy_value);
+  jlong* key = (*env)->GetLongArrayElements(env, jkey, &is_copy_key);
   
   for (int i =0; i < (len-8); i += 16) {
     encrypt((long *) &message[i], (long*) key);
   }
-  (*env)->ReleaseByteArrayElements(env,jmessage, message, 0);
+  (*env)->ReleaseByteArrayElements(env,jmessage, message, is_copy_value);
+  (*env)->ReleaseLongArrayElements(env,jkey,key,is_copy_key);
 };
 
 JNIEXPORT void JNICALL Java_lib_TinyEncryption_decrypt
   (JNIEnv* env, jclass jclss, jbyteArray jmessage, jlongArray jkey) {
+  jboolean is_copy_value;
+  jboolean is_copy_key;
   jsize len = (*env)->GetArrayLength(env, jmessage);
-  jbyte* message = (*env)->GetByteArrayElements(env, jmessage, NULL);
-  jlong* key = (*env)->GetLongArrayElements(env, jkey, NULL);
+  jbyte* message = (*env)->GetByteArrayElements(env, jmessage, &is_copy_value);
+  jlong* key = (*env)->GetLongArrayElements(env, jkey,  &is_copy_key);
   
   for (int i = 0; i< (len-8); i += 16) {
     decrypt((long*) &message[i], (long*) key);
   }
-  (*env)->ReleaseByteArrayElements(env, jmessage, message, 0);
+  (*env)->ReleaseByteArrayElements(env, jmessage, message, is_copy_value);
+    (*env)->ReleaseLongArrayElements(env,jkey,key,is_copy_key);
 };
 
 
