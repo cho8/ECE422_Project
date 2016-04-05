@@ -20,9 +20,8 @@ public class Client {
 	public static String ACCESS_GRANTED = "access granted";
 	public static String FINISHED = "finished";
 
-	Socket connection;
-	StringBuffer instr = new StringBuffer();
-	ReadWriteHandler rw;
+	private Socket connection;
+	private ReadWriteHandler rw;
 
 	public Client(String user, long[] key) {
 		this.user = user;
