@@ -14,12 +14,11 @@ public class Server implements Runnable {
 	public static String FINISHED = "finished";
 
 
-	static ServerSocket socket1;
-	public static int port;
+	private static ServerSocket socket1;
+	private static int port;
 	private Socket connection;
-	ReadWriteHandler rw;
+	private ReadWriteHandler rw;
 
-	static StringBuffer process;
 	private HashMap<long[], String> userHash;
 	private String currentUser = "";
 
