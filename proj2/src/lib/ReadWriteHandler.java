@@ -66,11 +66,4 @@ public class ReadWriteHandler {
 		return TinyEncryption.decryptData(message, key);
 	}
 
-	public String bytesToString(byte[] bytes) throws UnsupportedEncodingException {
-		return new String(bytes);
-	}
-
-	public byte[] stringToBytes(String str) {
-		return str.getBytes();
-	}
 }
