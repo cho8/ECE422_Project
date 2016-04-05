@@ -1,11 +1,13 @@
 package lib;
 
 import java.util.Arrays;
+import java.lang.Long;
 
 public class TinyEncryption {
 	public native static void encrypt(byte[] v, long[] k);
 	public native static void decrypt(byte[] v, long[] k);
 	
+	private static int LongBYTES=8;
 	static {
 		System.loadLibrary("tinyencryption");
 	}
@@ -24,7 +26,7 @@ public class TinyEncryption {
 	}
 	
 	private static byte[] padData(byte[] data) {
-		return Arrays.copyOf(data,  (int) Math.ceil((double) data.length / (Long.BYTES * 2)) * (Long.BYTES * 2));
+		return Arrays.copyOf(data,  (int) Math.ceil((double) data.length / (LongBYTES * 2)) * (LongBYTES * 2));
 	}
 
 }
