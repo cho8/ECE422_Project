@@ -89,7 +89,6 @@ public class Server implements Runnable {
 						rw.write(rw.encrypt(FILE_NOT_FOUND.getBytes()));
 					}
 				}
-				stop();
 			} // end checkUser
 
 		} catch (SocketException e) {
@@ -98,7 +97,7 @@ public class Server implements Runnable {
 			System.err.println("Server: Error--" +e);
 		
 		} finally {
-			try { connection.close(); } catch (IOException e) {}
+			try { stop(); } catch (IOException e) {}
 		}	
 	}
 

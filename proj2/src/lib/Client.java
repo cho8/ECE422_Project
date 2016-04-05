@@ -96,7 +96,7 @@ public class Client {
 				Files.write(path, receivedFile);
 				System.out.print("Done. Next?\n>");
 			} else if (receivedStr.equals(FILE_NOT_FOUND)) {
-				System.err.print("Invalid filename, try again...\n>");
+				System.err.print("Filename not found, try again...\n>");
 			} else {
 				throw new IOException ("Unexpected response to filename");
 			}
