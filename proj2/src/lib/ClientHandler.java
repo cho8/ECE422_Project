@@ -37,8 +37,6 @@ public class ClientHandler {
 			try {
 				if (client.login()) {
 					client.requestFileNames();
-				} else {
-					System.out.println("Login failed.");
 				}
 			} catch (IOException e) {
 				System.err.println("Client: Login Error--"+e);
