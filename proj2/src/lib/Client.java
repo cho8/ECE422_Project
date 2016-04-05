@@ -47,19 +47,12 @@ public class Client {
 		connection.close();		
 	}
 	
-	public void testConnection() throws UnsupportedEncodingException, IOException {
-		System.out.println("Hello!");
-		byte[] message = "Hello!".getBytes();
-		long[] key = new long[] {1827361872L,194291L, 91487L, 1784619L};
-		rw.setKey(key);
-		byte[] encr = rw.encrypt(message);
-		rw.write(encr);
-	}
-	
 	public boolean login() throws IOException {
+		System.out.println("Sending clientID");
+		byte[] encrUser = rw.encrypt(user.getBytes());
+		rw.write(encrUser);
 		
-		rw.write(user.getBytes());
-		
+		System.out.println("Receiving response...");
 		byte[] receivedBytes = rw.read();
 		String receivedMessage = new String(rw.decrypt(receivedBytes)).trim();
 

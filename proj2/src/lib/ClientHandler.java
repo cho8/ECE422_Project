@@ -9,7 +9,6 @@ public class ClientHandler {
 
 	private static Client client;
 	private static String  user;
-	private static long[] key;
 
 //	private static void initializeClientID() {
 //		key = new long[] {1827361872L,194291L, 91487L, 1784619L}; 	user="Client1";
@@ -38,9 +37,10 @@ public class ClientHandler {
 			try {
 				if (client.login()) {
 					client.requestFileNames();
+				} else {
+					System.out.println("Login failed.");
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				System.err.println("Client: Login Error--"+e);
 			} catch (Exception e) {
 				System.err.println("Client: Error--"+e);

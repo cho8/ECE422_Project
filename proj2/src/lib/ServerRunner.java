@@ -10,7 +10,6 @@ public class ServerRunner {
 	private static int port = 16000; //hardcoded 16000
 
 	private static ServerSocket serversock;
-	private boolean stopped = false;
 	
 	public static void initializeUsers() {
 		users = new HashMap<long[], String>();
@@ -28,7 +27,6 @@ public class ServerRunner {
 			ServerSocket serversock = new ServerSocket(port);
 			System.out.println("Starting Server");
 			while (true) {
-				
 				Server server = new Server(serversock.accept(), ++count);
 				System.out.println("Incoming socket connection");
 				server.loadUsers(users);
@@ -42,6 +40,7 @@ public class ServerRunner {
 		} finally {
 			try {
 				serversock.close();
+				System.exit(0);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.err.println("Error closing server socket " +e);
@@ -49,7 +48,7 @@ public class ServerRunner {
 		}
 		//TODO: killing the threads!
 		System.out.println("Server Closed. Goodbye.");
-		System.exit(0);
+
 	}
 	
 	public static void main (String[] args) {

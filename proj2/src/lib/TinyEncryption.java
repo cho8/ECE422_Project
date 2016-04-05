@@ -26,6 +26,8 @@ public class TinyEncryption {
 	}
 	
 	private static byte[] padData(byte[] data) {
+		// return Arrays.copyOf(data,  (int) Math.ceil((double) data.length / (Long.BYTES * 2)) * (Long.BYTES * 2));
+		// Lab machines didn't like Long.BYTES, resorted to defining a constant instead.
 		return Arrays.copyOf(data,  (int) Math.ceil((double) data.length / (LongBYTES * 2)) * (LongBYTES * 2));
 	}
 

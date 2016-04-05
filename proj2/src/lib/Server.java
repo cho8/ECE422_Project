@@ -37,27 +37,25 @@ public class Server implements Runnable {
 
 	//TODO: login!!!
 	public boolean checkUser() throws IOException {
-		//		 checks all keys with the client provided ID
-		//		 if matches the clientID in its hash, send back an ack;
+		System.out.println("Receiving clientID");
 		byte[] receivedUser = rw.read();
 		for(long[] key : userHash.keySet()) {
+			// check known keys against received encrypted user
 			byte[] decr = TinyEncryption.decryptData(receivedUser, key);
-			if (userHash.get(key).equals(new String(decr))) {
+			String decrStr = new String(decr);
+			if (userHash.getOrDefault(key, "").equals(decrStr)) {
+				System.out.println("Found a user!");
 				currentUser = userHash.get(key);
 				rw.setKey(key);
-				break;
+				System.out.println(currentUser + " granted access.");
+				rw.write(rw.encrypt(ACCESS_GRANTED.getBytes()));
+				return true;
 			}
 		}
-		if (rw.getKey() != null) {
-			System.out.println(currentUser+ " granted access.");
-			byte[] message = ACCESS_GRANTED.getBytes();
-			rw.write(rw.encrypt(message));
-			return true;
-		} else {
-			byte[] message = ACCESS_DENIED.getBytes();
-			rw.write(rw.encrypt(message));
-			return false;
-		}
+		byte[] message = ACCESS_DENIED.getBytes();
+		rw.write(rw.encrypt(message));
+		return false;
+
 	}
 
 
