@@ -37,13 +37,13 @@ public class Server implements Runnable {
 
 	//TODO: login!!!
 	public boolean checkUser() throws IOException {
-		System.out.println("Receiving clientID");
 		byte[] receivedUser = rw.read();
 		for(long[] key : userHash.keySet()) {
 			// check known keys against received encrypted user
-			byte[] decr = TinyEncryption.decryptData(receivedUser, key);
-			String decrStr = new String(decr);
-			if (userHash.getOrDefault(key, "").equals(decrStr)) {
+			rw.setKey(key);
+			byte[] decr = rw.decrypt(receivedUser);
+			String decrStr = new String(decr).trim();
+			if (userHash.get(key).equals(decrStr)) {
 				System.out.println("Found a user!");
 				currentUser = userHash.get(key);
 				rw.setKey(key);
@@ -60,7 +60,11 @@ public class Server implements Runnable {
 
 
 	public void stop() throws IOException {
-		System.out.println("Client is finished. Goodbye "+currentUser+".");
+		String message = "Client connection stopped. ";
+		if (!currentUser.isEmpty()) {
+			message += "Goodbye #{currentUser}.";
+		}
+		System.out.println(message);
 		connection.close();
 		Thread.currentThread().interrupt();
 	}
@@ -78,7 +82,7 @@ public class Server implements Runnable {
 					reqString = new String(receivedRequest);
 					path = Paths.get(reqString);
 					if (Files.isRegularFile(path) && Files.isReadable(path)) {
-						System.out.println("Server found file for " +currentUser + " "+ reqString);
+						System.out.println("Sending "+reqString+" to "+currentUser);
 						rw.write(rw.encrypt(FILE_ACK.getBytes()));
 						
 						byte[] file = Files.readAllBytes(path);

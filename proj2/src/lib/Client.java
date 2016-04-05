@@ -48,7 +48,7 @@ public class Client {
 	}
 	
 	public boolean login() throws IOException {
-		System.out.println("Sending clientID");
+		System.out.println("Logging in...");
 		byte[] encrUser = rw.encrypt(user.getBytes());
 		rw.write(encrUser);
 		
@@ -59,6 +59,7 @@ public class Client {
 		if (receivedMessage.equals(ACCESS_DENIED)) {
 			System.out.println("Login denied.");
 			rw.write(FINISHED.getBytes());
+			return false;
 		} else if (receivedMessage.equals(ACCESS_GRANTED)) {
 			System.out.println("Login successful.");
 			return true;
