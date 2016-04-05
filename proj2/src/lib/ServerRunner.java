@@ -33,10 +33,10 @@ public class ServerRunner {
 				
 				Thread thread = new Thread(server);
 				thread.start();
-				if (thread.interrupted()) break;
 			}
 		} catch (Exception e) {
 			System.err.println("Error in runServer." +e);
+			
 		} finally {
 			try {
 				serversock.close();

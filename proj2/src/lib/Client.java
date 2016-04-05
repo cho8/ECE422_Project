@@ -76,7 +76,7 @@ public class Client {
 	
 	public void requestFileNames() throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Request a filename. ('finished' to exit)");
+		System.out.print("Request a filename. ('finished' to exit)\n>");
 		String filename = "";
 		// loop for multiple filenames
 		while (true) {
@@ -94,9 +94,9 @@ public class Client {
 				byte[] receivedFile= rw.read();
 				Path path = Paths.get(filename);
 				Files.write(path, receivedFile);
-				System.out.println("Done. Next?");
+				System.out.print("Done. Next?\n>");
 			} else if (receivedStr.equals(FILE_NOT_FOUND)) {
-				System.err.println("Invalid filename, try again...");
+				System.err.print("Invalid filename, try again...\n>");
 			} else {
 				throw new IOException ("Unexpected response to filename");
 			}

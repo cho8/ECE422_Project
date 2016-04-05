@@ -49,12 +49,11 @@ public class Server implements Runnable {
 			}
 		}
 		if (rw.getKey() != null) {
-			System.out.println(ACCESS_GRANTED);
+			System.out.println(currentUser+ " granted access.");
 			byte[] message = ACCESS_GRANTED.getBytes();
 			rw.write(rw.encrypt(message));
 			return true;
 		} else {
-			System.out.println(ACCESS_DENIED);
 			byte[] message = ACCESS_DENIED.getBytes();
 			rw.write(rw.encrypt(message));
 			return false;
@@ -63,7 +62,7 @@ public class Server implements Runnable {
 
 
 	public void stop() throws IOException {
-		System.out.println("Client is finished. Goodbye "+currentUser);
+		System.out.println("Client is finished. Goodbye "+currentUser+".");
 		connection.close();
 		Thread.currentThread().interrupt();
 	}
@@ -81,7 +80,7 @@ public class Server implements Runnable {
 					reqString = new String(receivedRequest);
 					path = Paths.get(reqString);
 					if (Files.isRegularFile(path) && Files.isReadable(path)) {
-						System.out.println("Server found file "+ reqString);
+						System.out.println("Server found file for " +currentUser + " "+ reqString);
 						rw.write(rw.encrypt(FILE_ACK.getBytes()));
 						
 						byte[] file = Files.readAllBytes(path);
@@ -93,8 +92,11 @@ public class Server implements Runnable {
 				stop();
 			} // end checkUser
 
+		} catch (SocketException e) {
+			System.err.println("Server: Socket Error-- "+e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("Server: Error--" +e);
+		
 		} finally {
 			try { connection.close(); } catch (IOException e) {}
 		}	
