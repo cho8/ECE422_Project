@@ -10,14 +10,14 @@ public class ClientHandler {
 	private static Client client;
 	private static String  user;
 
-//	private static void initializeClientID() {
-//		key = new long[] {1827361872L,194291L, 91487L, 1784619L}; 	user="Client1";
-//		key = new long[] {129048L, 1249081L, 89L, 9035717L}, 		user = "Client2");
-//		key = new long[] {5139841L, 1839741L, 80808808L, 279381L}, 	user = "Client3");
-//		key = new long[] {8018048L, 192837L, 938401983L, 2342L}, 	user= "Client4");
-//		key = new long[] {1827L,11111L, 90923201L, 178461119L}, 	user ="Client5");
-//		key = new long[] {361872L, 1421L, 9999147L, 22222222L}, 	user = "Client6");
-//	}
+/*		For testing purposes: run clientHandler with these command line arguments
+		keys = 1827361872 ,194291, 91487, 1784619}; 	user = "Client1";
+		keys = 129048L, 1249081L, 89L, 9035717L, 	user = "Client2";
+		keys = 5139841L, 1839741L, 80808808L, 279381L, 	user = "Client3";
+		keys = 8018048L, 192837L, 938401983L, 2342L, 	user=  "Client4";
+		keys = 1827L,11111L, 90923201L, 178461119L}, 	user = "Client5";
+		keys = 361872L, 1421L, 9999147L, 22222222L, 	user = "Client6";
+*/
 
 
 
@@ -25,7 +25,7 @@ public class ClientHandler {
 		//	initializeClientID();
 		//		 parse command line args
 		if (args.length != 5) {
-			System.out.println("USAGE: <username> <keys>");
+			System.out.println("USAGE: <username> <key (4 longs)>");
 		} else {
 			user = args[0];
 			long[] key = new long[4];
