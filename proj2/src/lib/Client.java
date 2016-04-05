@@ -12,13 +12,13 @@ import java.lang.StringBuffer;
 public class Client {
 	private String user;
 	private String host = "localhost";
-	public static int port = 16000; //hardcoded 16000
+	private static int port = 16000; //hardcoded 16000
 	
-	public static String FILE_NOT_FOUND = "file_not_found";
-	public static String FILE_ACK = "file_ACK";
-	public static String ACCESS_DENIED = "access denied";
-	public static String ACCESS_GRANTED = "access granted";
-	public static String FINISHED = "finished";
+	private static String FILE_NOT_FOUND = "file_not_found";
+	private static String FILE_ACK = "file_ACK";
+	private static String ACCESS_DENIED = "access denied";
+	private static String ACCESS_GRANTED = "access granted";
+	private static String FINISHED = "finished";
 
 	private Socket connection;
 	private ReadWriteHandler rw;
