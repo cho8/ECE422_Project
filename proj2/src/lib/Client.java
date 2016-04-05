@@ -43,6 +43,7 @@ public class Client {
 	}
 	
 	public void closeSocket() throws IOException {
+		System.out.println("Closing client connection.");
 		connection.close();		
 	}
 	
