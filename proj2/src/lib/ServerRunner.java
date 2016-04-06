@@ -11,7 +11,7 @@ public class ServerRunner {
 
 	private static ServerSocket serversock;
 	
-	public static void initializeUsers() {
+	private static void initializeUsers() {
 		users = new HashMap<long[], String>();
 		users.put(new long[] {1827361872L,194291L, 91487L, 1784619L}, 	"Client1");
 		users.put(new long[] {129048L, 1249081L, 89L, 9035717L}, 		"Client2");
@@ -46,7 +46,6 @@ public class ServerRunner {
 				System.err.println("Error closing server socket " +e);
 			}
 		}
-		//TODO: killing the threads!
 		System.out.println("Server Closed. Goodbye.");
 
 	}

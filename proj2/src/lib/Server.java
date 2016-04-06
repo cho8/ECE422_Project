@@ -13,9 +13,6 @@ public class Server implements Runnable {
 	public static String ACCESS_GRANTED = "access granted";
 	public static String FINISHED = "finished";
 
-
-	private static ServerSocket socket1;
-	private static int port;
 	private Socket connection;
 	private ReadWriteHandler rw;
 
@@ -24,17 +21,13 @@ public class Server implements Runnable {
 
 	public Server(Socket s, int port) {
 		this.connection = s;
-		this.port = port;
 		rw = new ReadWriteHandler(s);
 	}
-
 
 	public void loadUsers(HashMap<long[], String> users) {
 		userHash = users;
 	}
 
-
-	//TODO: login!!!
 	public boolean checkUser() throws IOException {
 		byte[] receivedUser = rw.read();
 		for(long[] key : userHash.keySet()) {
@@ -61,7 +54,7 @@ public class Server implements Runnable {
 	public void stop() throws IOException {
 		String message = "Client connection stopped. ";
 		if (!currentUser.isEmpty()) {
-			message += "Goodbye #{currentUser}.";
+			message += "Goodbye "+currentUser+".";
 		}
 		System.out.println(message);
 		connection.close();

@@ -1,11 +1,10 @@
 package lib;
 
 import java.util.Arrays;
-import java.lang.Long;
 
 public class TinyEncryption {
-	public native static void encrypt(byte[] v, long[] k);
-	public native static void decrypt(byte[] v, long[] k);
+	private native static void encrypt(byte[] v, long[] k);
+	private native static void decrypt(byte[] v, long[] k);
 	
 	private static int LongBYTES=8;
 	static {

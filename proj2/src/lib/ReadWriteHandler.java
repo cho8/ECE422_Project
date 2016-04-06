@@ -25,8 +25,7 @@ public class ReadWriteHandler {
 			out = new DataOutputStream(connection.getOutputStream());
 			in = new DataInputStream(connection.getInputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("ReadWriteHandler init err: "+e);
 		}
 	}
 
@@ -46,10 +45,8 @@ public class ReadWriteHandler {
 			in.readFully(message,0,message.length);
 			return message;
 		}
-		return null;
-		
+		return new byte[0];
 	}
-
 
 	public void write(byte[] message) throws IOException {
 		out.writeInt(message.length);
